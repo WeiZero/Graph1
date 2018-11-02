@@ -1,0 +1,18 @@
+﻿  main.cpp
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(29): warning C4101: 'ShaderMenu': 未參考的區域變數
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(99): warning C4305: '+=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(107): warning C4305: '-=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(115): warning C4305: '+=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(123): warning C4305: '-=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(193): warning C4244: '正在初始化': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(249): warning C4018: '<': signed/unsigned 不相符
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(273): warning C4018: '<': signed/unsigned 不相符
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(341): warning C4101: 'roll': 未參考的區域變數
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(341): warning C4101: 'pitch': 未參考的區域變數
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(342): warning C4101: 'beta': 未參考的區域變數
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(341): warning C4101: 'yaw': 未參考的區域變數
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(341): warning C4101: 'r': 未參考的區域變數
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(490): warning C4244: '正在初始化': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(513): warning C4305: '-=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\vs_code\graph1\robot-rx78\robot\main.cpp(516): warning C4305: '+=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+  Robot.vcxproj -> E:\Vs_code\Graph1\Robot-RX78\Robot\Debug\Robot.exe

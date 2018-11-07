@@ -507,8 +507,8 @@ vn 0.573495 -0.706724 -0.414300
 vn 0.273121 -0.310837 0.910376
 vn 0.944167 -0.194838 0.265681
 s off
-g legs:transformblitzcrank_transformblitzcrank
-usemtl legs:blinn1SG
+g leg_r:transformblitzcrank_transformblitzcrank
+usemtl blinn4SG
 f 1/1/1 2/2/2 3/3/3
 f 3/4/4 4/5/5 1/6/6
 f 3/7/7 2/8/8 5/9/9

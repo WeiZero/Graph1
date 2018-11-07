@@ -268,8 +268,8 @@ void Obj2Buffer(){
 	std::vector<vec3> Kss;
 	std::vector<std::string> Materials;//mtl-name
 	std::string texture;
-	loadMTL("Obj/leg_l.mtl",Kds,Kas,Kss,Materials,texture);
-	//printf("%d\n",texture);
+	loadMTL("Obj/body.mtl",Kds,Kas,Kss,Materials,texture);
+
 	for(int i = 0;i<Materials.size();i++){
 		string mtlname = Materials[i];
 		//  name            vec3
@@ -277,9 +277,15 @@ void Obj2Buffer(){
 	}
 
 	
-	load2Buffer("Obj/UP_body.obj",0);
-	load2Buffer("Obj/leg_r.obj",1);
-	load2Buffer("Obj/leg_l.obj",2);
+	load2Buffer("Obj/head.obj",0);
+	load2Buffer("Obj/body.obj",1);
+	load2Buffer("Obj/butt.obj",2);
+	load2Buffer("Obj/arm_r.obj", 3);
+	load2Buffer("Obj/arm_l.obj", 4);
+	load2Buffer("Obj/hand_r.obj", 5);
+	load2Buffer("Obj/hand_l.obj", 6);
+	load2Buffer("Obj/leg_r.obj", 7);
+	load2Buffer("Obj/leg_l.obj", 8);
 	
 	GLuint totalSize[3] = {0,0,0};
 	GLuint offset[3] = {0,0,0};
@@ -344,12 +350,12 @@ void updateModels(){
 	//=============================================================
 	//¥ª¸}
 	alpha = angles[2]; gamma = 10;
-	Rotatation[2] = rotate(t, 1, 0, 0);
+	//Rotatation[2] = rotate(t, 1, 0, 0);
 
 	//alpha = angles[2];
 
 	//Rotatation[2] = rotate(alpha, 1, 0, 0);
-	Models[2] =  Rotatation[2] * Models[2];
+	//Models[2] =  Rotatation[2] * Models[2];
 	//¥k¸}
 
 	//=============================================================

@@ -349,13 +349,21 @@ void updateModels(){
 	float t = glutGet(GLUT_ELAPSED_TIME) * 0.045f;
 	//=============================================================
 	//左腳
-	alpha = angles[2]; gamma = 10;
-	//Rotatation[2] = rotate(t, 1, 0, 0);
+	alpha = angles[8]; gamma = 10;
 
-	//alpha = angles[2];
+	// 先讓他隨時間繞著X轉
+	Rotatation[8] = rotate(t, 1, 0, 0);
 
-	//Rotatation[2] = rotate(alpha, 1, 0, 0);
-	//Models[2] =  Rotatation[2] * Models[2];
+	//	位移medel到(0,0,0)使得rotate輕鬆
+	Translation[8] = translate(-1, -2.344, 0);
+	
+	// 旋轉model
+	Models[8] =  Rotatation[8] * Translation[8] * Models[8];
+
+	//	使model回到原本位置
+	//	7 為暫時借用事後找別的代替
+	Translation[7] = translate(1, 2.344, 0);
+	Models[8] =  Translation[7] * Models[8];
 	//右腳
 
 	//=============================================================

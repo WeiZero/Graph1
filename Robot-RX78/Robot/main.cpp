@@ -75,70 +75,111 @@ void idle(int dummy){
 	
 	glutTimerFunc (50, idle, out); 
 }
+
 void resetObj(int f){
 	for(int i = 0 ; i < PARTSNUM;i++){
 		angles[i] = 0.0f;
 	}	
 }
+
 void walk(int frame){
 	switch(frame){
 	case 0:
+		angles[5] = -55;
+		angles[6] = 45;
 		angles[7] = 45;
 		angles[8] = -55;
 		break;
 	case 1:
+		angles[5] = -45;
+		angles[6] = 30;
 		angles[7] = 30;
 		angles[8] = -45;
 		break;
 	case 2:
+		angles[5] = -30;
+		angles[6] = 15;
 		angles[7] = 15;
 		angles[8] = -30;
 		break;
 	case 3:
+		angles[5] = -15;
+		angles[6] = 0;
 		angles[7] = 0;
 		angles[8] = -15;
 		break;
 	case 4:
+		angles[5] = 0;
+		angles[6] = -15;
 		angles[7] = -15;
 		angles[8] = 0;
 		break;
 	case 5:
+		angles[5] = 15;
+		angles[6] = -30;
 		angles[7] = -30;
 		angles[8] = 15;
 		break;
 	case 6:
+		angles[5] = 30;
+		angles[6] = -45;
 		angles[8] = -45;
 		angles[8] = 30;
 		break;
 	case 7:
+		angles[5] = 45;
+		angles[6] = -55;
 		angles[8] = -55;
 		angles[8] = 45;
 		break;
 	case 8:
+		angles[5] = 30;
+		angles[6] = -45;
 		angles[7] = -45;
 		angles[8] = 30;
 		break;
 	case 9:
+		angles[5] = 15;
+		angles[6] = -30;
 		angles[7] = -30;
 		angles[8] = 15;
 		break;
 	case 10:
+		angles[5] = 0;
+		angles[6] = -15;
 		angles[7] = -15;
 		angles[8] = 0;
 		break;
 	case 11:
+		angles[5] = -15;
+		angles[6] = 0;
 		angles[7] = 0;
 		angles[8] = -15;
 		break;
 	case 12:
+		angles[5] = -30;
+		angles[6] = 15;
 		angles[7] = 15;
 		angles[8] = -30;
 		break;
 	case 13:
+		angles[5] = -45;
+		angles[6] = 30;
 		angles[7] = 30;
 		angles[8] = -45;
 		break;
 	}
+}
+
+void attack(int frame) {
+
+	switch (frame) {
+	case 1:
+		break;
+	case 2:
+		break;
+	}
+
 }
 
 
@@ -360,35 +401,77 @@ void updateModels(){
 		Rotatation[i] = mat4(1.0f);
 		Translation[i] = mat4(1.0f); 
 	}
-	float r,pitch,yaw,roll;
-	float alpha, beta ,gamma;
 	//=============================================================
-	//左腳(8)
-	// 先讓他隨時間繞著X轉
+	//	頭(0)
+	Rotatation[0] = rotate(angles[0], 1, 0, 0);
+	Translation[0] = translate(0, -11, -1.5);
+	Models[0] = Rotatation[0] * Translation[0] * Models[0];
+	Translation[0] = translate(0, 11, 1.5);
+	Models[0] = Translation[0] * Models[0];
+	//=============================================================
+	//	身體(1)
+	Rotatation[1] = rotate(angles[1], 1, 0, 0);
+	Translation[1] = translate(0, -7, 0);
+	Models[1] = Rotatation[1] * Translation[1] * Models[1];
+	Translation[1] = translate(0, 7, 0);
+	Models[1] = Translation[1] * Models[1];
+	//=============================================================
+	//	屁股(2)
+	Rotatation[2] = rotate(angles[2], 1, 0, 0);
+	Translation[2] = translate(0, -3.5, 0);
+	Models[2] = Rotatation[2] * Translation[2] * Models[2];
+	Translation[2] = translate(0, 3.5, 0);
+	Models[2] = Translation[2] * Models[2];
+	//=============================================================
+	//	右肩(3)
+	Rotatation[3] = rotate(angles[3], 1, 0, 0);
+	Translation[3] = translate(5, -9, -1.2);
+	Models[3] = Rotatation[3] * Translation[3] * Models[3];
+	Translation[3] = translate(-5, 9, 1.2);
+	Models[3] = Translation[3] * Models[3];
+	//=============================================================
+	//	左肩(4)
+	Rotatation[4] = rotate(angles[4], 1, 0, 0);
+	Translation[4] = translate(-5, -9, -1.2);
+	Models[4] = Rotatation[4] * Translation[4] * Models[4];
+	Translation[4] = translate(5, 9, 1.2);
+	Models[4] = Translation[4] * Models[4];
+	//=============================================================
+	//	右手(5)
+	Rotatation[5] = rotate(angles[5], 1, 0, 0);
+	Translation[5] = translate(6.5, -5.5, -3);
+	Models[5] = Rotatation[5] * Translation[5] * Models[5];
+	Translation[5] = translate(-6.5, 5.5, 3);
+	Models[5] = Translation[5] * Models[5];
+	//=============================================================
+	//	左手(6)
+	Rotatation[6] = rotate(angles[6], 1, 0, 0);
+	Translation[6] = translate(-6.5, -5.5, -3);
+	Models[6] = Rotatation[6] * Translation[6] * Models[6];
+	Translation[6] = translate(6.5, 5.5, 3);
+	Models[6] = Translation[6] * Models[6];
+	//=============================================================
+	//	右腳(7)
+	Rotatation[7] = rotate(angles[7], 1, 0, 0);
+	Translation[7] = translate(1, -2.344, 0);
+	Models[7] = Rotatation[7] * Translation[7] * Models[7];
+	Translation[7] = translate(-1, 2.344, 0);
+	Models[7] = Translation[7] * Models[7];
+
+	//=============================================================
+	//	左腳(8)
+	//	先讓他隨時間繞著X轉
 	Rotatation[8] = rotate(angles[8], 1, 0, 0);
 
 	//	位移medel到(0,0,0)使得rotate輕鬆
 	Translation[8] = translate(-1, -2.344, 0);
-	
-	// 旋轉model
-	Models[8] =  Rotatation[8] * Translation[8] * Models[8];
+
+	//	旋轉model
+	Models[8] = Rotatation[8] * Translation[8] * Models[8];
 
 	//	使model回到原本位置
 	Translation[8] = translate(1, 2.344, 0);
-	Models[8] =  Translation[8] * Models[8];
-	//右腳(7)
-	Rotatation[7] = rotate(angles[7], 1, 0, 0);
-
-	//	位移medel到(0,0,0)使得rotate輕鬆
-	Translation[7] = translate(1, -2.344, 0);
-
-	// 旋轉model
-	Models[7] = Rotatation[7] * Translation[7] * Models[7];
-
-	//	使model回到原本位置
-	Translation[7] = translate(-1, 2.344, 0);
-	Models[7] = Translation[7] * Models[7];
-
+	Models[8] = Translation[8] * Models[8];
 	//=============================================================
 }
 

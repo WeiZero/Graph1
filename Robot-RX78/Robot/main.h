@@ -62,7 +62,7 @@ GLuint UBO;
 GLuint VBOs[PARTSNUM];
 GLuint uVBOs[PARTSNUM];
 GLuint nVBOs[PARTSNUM];
-GLuint program;
+GLuint program,program2;
 int pNo;
 
 float angles[PARTSNUM];

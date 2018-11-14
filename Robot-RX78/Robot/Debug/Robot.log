@@ -1,19 +1,19 @@
 ﻿  main.cpp
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(29): warning C4101: 'ShaderMenu': 未參考的區域變數
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(331): warning C4244: '正在初始化': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(387): warning C4018: '<': signed/unsigned 不相符
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(411): warning C4018: '<': signed/unsigned 不相符
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(510): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(512): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(517): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(519): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(523): warning C4244: '引數': 將 'int' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(530): warning C4244: '引數': 將 'int' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(538): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(540): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(549): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(555): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(609): warning C4244: '正在初始化': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(632): warning C4305: '-=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graph1\robot-rx78\robot\main.cpp(635): warning C4305: '+=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-  Robot.vcxproj -> C:\Users\user\Desktop\Graph1\Robot-RX78\Robot\Debug\Robot.exe
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(42): warning C4101: 'ShaderMenu': 未參考的區域變數
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(385): warning C4244: '正在初始化': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(441): warning C4018: '<': signed/unsigned 不相符
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(479): warning C4018: '<': signed/unsigned 不相符
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(578): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(580): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(585): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(587): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(591): warning C4244: '引數': 將 'int' 轉換為 'float'，由於類型不同，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(598): warning C4244: '引數': 將 'int' 轉換為 'float'，由於類型不同，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(606): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(608): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(617): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(623): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(676): warning C4244: '正在初始化': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(699): warning C4305: '-=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+e:\code\c++\graph1\robot-rx78\robot\main.cpp(702): warning C4305: '+=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+  Robot.vcxproj -> E:\code\C++\Graph1\Robot-RX78\Robot\Debug\Robot.exe

@@ -31,6 +31,7 @@ int main(int argc, char** argv){
 	//加入右鍵物件
 	glutAddMenuEntry("idle",0);
 	glutAddMenuEntry("walk",1);
+	glutAddMenuEntry("dance", 2);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	//與右鍵關聯
 
 	ModeMenu = glutCreateMenu(ModeMenuEvents);//建立右鍵菜單
@@ -47,7 +48,7 @@ int main(int argc, char** argv){
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	//與右鍵關聯
 
 	glutMouseFunc(Mouse);
-	glutTimerFunc (50, idle, 0); 
+	glutTimerFunc (75, idle, 0); 
 	glutMainLoop();
 	return 0;
 }
@@ -65,26 +66,33 @@ void idle(int dummy){
 	if(action == WALK){
 		walk(dummy);
 		out = dummy+1;
-		if(out > 13) out = 1;
+		if(out > 13) out = 0;
 	}
 	else if(action == IDLE){
 		resetObj(dummy);
 		out = 0;
 	}
+	else if (action == DANCE) {
+		dance(dummy);
+		out = dummy + 1;
+		if (out > 13) out = 0;
+	}
 	glutPostRedisplay();
 	
-	glutTimerFunc (50, idle, out); 
+	glutTimerFunc (75, idle, out); 
 }
 
 void resetObj(int f){
-	for(int i = 0 ; i < PARTSNUM;i++){
+	for(int i = 0 ; i < PARTSNUM;i++)
 		angles[i] = 0.0f;
-	}	
+	for (int i = 0; i < 4; i++)
+		hand_rotate[i] = 0;
 }
 
 void walk(int frame){
 	switch(frame){
 	case 0:
+		resetObj(1);
 		angles[5] = -55;
 		angles[6] = 45;
 		angles[7] = 45;
@@ -123,13 +131,13 @@ void walk(int frame){
 	case 6:
 		angles[5] = 30;
 		angles[6] = -45;
-		angles[8] = -45;
+		angles[7] = -45;
 		angles[8] = 30;
 		break;
 	case 7:
 		angles[5] = 45;
 		angles[6] = -55;
-		angles[8] = -55;
+		angles[7] = -55;
 		angles[8] = 45;
 		break;
 	case 8:
@@ -171,12 +179,85 @@ void walk(int frame){
 	}
 }
 
-void attack(int frame) {
+void dance(int frame) {
 
 	switch (frame) {
+	case 0:
+		resetObj(1);
+		angles[0] = -60;
+		angles[1] = -30;
+		angles[3] = 20;
+		angles[5] = 50;
+		hand_rotate[2] = -30;
+		hand_rotate[3] = -30;
+		break;
 	case 1:
+		angles[1] = -60;
+		angles[3] = -15;
+		angles[5] = 25;
 		break;
 	case 2:
+		angles[3] = -30;
+		hand_rotate[1] = -30;
+		break;
+	case 3:
+		angles[3] = -60;
+		break;
+	case 4:
+		angles[3] = -30;
+		hand_rotate[1] = 0;
+		break;
+	case 5:
+		angles[0] = -30;
+		angles[1] = -30;
+		angles[3] = -15;
+		angles[5] = 15;
+		break;
+	case 6:
+		angles[0] = 0;
+		angles[1] = 0;
+		angles[3] = 0;
+		angles[5] = 0;
+		hand_rotate[2] = 0;
+		hand_rotate[3] = 0;
+		break;
+	case 7:
+		angles[0] = 60;
+		angles[1] = 30;
+		angles[4] = 20;
+		angles[6] = 50;
+		hand_rotate[0] = -30;
+		hand_rotate[1] = -30;
+		break;
+	case 8:
+		angles[1] = 60;
+		angles[4] = -15;
+		angles[6] = 25;
+		break;
+	case 9:
+		angles[4] = -30;
+		hand_rotate[3] = -30;
+		break;
+	case 10:
+		angles[4] = -60;
+		break;
+	case 11:
+		angles[4] = -30;
+		hand_rotate[3] = 0;
+		break;
+	case 12:
+		angles[0] = -30;
+		angles[1] = -30;
+		angles[4] = -15;
+		angles[6] = 15;
+		break;
+	case 13:
+		angles[0] = 0;
+		angles[1] = 0;
+		angles[4] = 0;
+		angles[6] = 0;
+		hand_rotate[0] = 0;
+		hand_rotate[1] = 0;
 		break;
 	}
 
@@ -210,9 +291,6 @@ void init(){
     M_KaID = glGetUniformLocation(program,"Material.Ka");
 	M_KdID = glGetUniformLocation(program,"Material.Kd");
 	M_KsID = glGetUniformLocation(program,"Material.Ks");
-	//or
-	M_KdID = M_KaID+1;
-	M_KsID = M_KaID+2;
 
 	Projection = glm::perspective(80.0f,4.0f/3.0f,0.1f,100.0f);
 	//glm::mat4 Projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f); // In world coordinates
@@ -237,6 +315,13 @@ void init(){
 	glBindBufferRange(GL_UNIFORM_BUFFER,0,UBO,0,UBOsize);
 	glUniformBlockBinding(program, MatricesIdx,0);
 
+
+	// for future 
+	// now just test
+	ShaderInfo gray_shader[] = {
+		{ GL_VERTEX_SHADER, "gray.vp" },//vertex shader
+		{ GL_FRAGMENT_SHADER, "gray.fp" },//fragment shader
+		{ GL_NONE, NULL }};
 
 	glClearColor(0.0,0.0,0.0,1);//black screen
 }
@@ -394,6 +479,7 @@ void Obj2Buffer(){
 }
 
 void updateModels(){
+
 	mat4 Rotatation[PARTSNUM];
 	mat4 Translation[PARTSNUM];
 	for(int i = 0 ; i < PARTSNUM;i++){
@@ -403,56 +489,56 @@ void updateModels(){
 	}
 	//=============================================================
 	//	頭(0)
-	Rotatation[0] = rotate(angles[0], 1, 0, 0);
+	Rotatation[0] = rotate(angles[0], 0, 1, 0);
 	Translation[0] = translate(0, -11, -1.5);
 	Models[0] = Rotatation[0] * Translation[0] * Models[0];
 	Translation[0] = translate(0, 11, 1.5);
 	Models[0] = Translation[0] * Models[0];
 	//=============================================================
 	//	身體(1)
-	Rotatation[1] = rotate(angles[1], 1, 0, 0);
+	Rotatation[1] = rotate(angles[1], 0, 1, 0);
 	Translation[1] = translate(0, -7, 0);
 	Models[1] = Rotatation[1] * Translation[1] * Models[1];
 	Translation[1] = translate(0, 7, 0);
 	Models[1] = Translation[1] * Models[1];
 	//=============================================================
 	//	屁股(2)
-	Rotatation[2] = rotate(angles[2], 1, 0, 0);
+	Rotatation[2] = rotate(angles[2], 0, 1, 0);
 	Translation[2] = translate(0, -3.5, 0);
 	Models[2] = Rotatation[2] * Translation[2] * Models[2];
 	Translation[2] = translate(0, 3.5, 0);
 	Models[2] = Translation[2] * Models[2];
 	//=============================================================
 	//	右肩(3)
-	Rotatation[3] = rotate(angles[3], 1, 0, 0);
+	Rotatation[3] = rotate(angles[3], 1, 0, 0) * Rotatation[1];
 	Translation[3] = translate(5, -9, -1.2);
 	Models[3] = Rotatation[3] * Translation[3] * Models[3];
 	Translation[3] = translate(-5, 9, 1.2);
 	Models[3] = Translation[3] * Models[3];
 	//=============================================================
 	//	左肩(4)
-	Rotatation[4] = rotate(angles[4], 1, 0, 0);
+	Rotatation[4] = rotate(angles[4], 1, 0, 0) * Rotatation[1];
 	Translation[4] = translate(-5, -9, -1.2);
 	Models[4] = Rotatation[4] * Translation[4] * Models[4];
 	Translation[4] = translate(5, 9, 1.2);
 	Models[4] = Translation[4] * Models[4];
 	//=============================================================
 	//	右手(5)
-	Rotatation[5] = rotate(angles[5], 1, 0, 0);
+	Rotatation[5] = rotate(hand_rotate[1], 0, 0, 1) * rotate(hand_rotate[0], 0, 1, 0) * rotate(angles[5], 1, 0, 0) * Rotatation[3];
 	Translation[5] = translate(6.5, -5.5, -3);
 	Models[5] = Rotatation[5] * Translation[5] * Models[5];
 	Translation[5] = translate(-6.5, 5.5, 3);
 	Models[5] = Translation[5] * Models[5];
 	//=============================================================
 	//	左手(6)
-	Rotatation[6] = rotate(angles[6], 1, 0, 0);
+	Rotatation[6] = rotate(hand_rotate[3], 0, 0, 1) * rotate(hand_rotate[2], 0, 1, 0) * rotate(angles[6], 1, 0, 0) * Rotatation[4];
 	Translation[6] = translate(-6.5, -5.5, -3);
 	Models[6] = Rotatation[6] * Translation[6] * Models[6];
 	Translation[6] = translate(6.5, 5.5, 3);
 	Models[6] = Translation[6] * Models[6];
 	//=============================================================
 	//	右腳(7)
-	Rotatation[7] = rotate(angles[7], 1, 0, 0);
+	Rotatation[7] = rotate(angles[7], 1, 0, 0) * Rotatation[2];
 	Translation[7] = translate(1, -2.344, 0);
 	Models[7] = Rotatation[7] * Translation[7] * Models[7];
 	Translation[7] = translate(-1, 2.344, 0);
@@ -461,7 +547,7 @@ void updateModels(){
 	//=============================================================
 	//	左腳(8)
 	//	先讓他隨時間繞著X轉
-	Rotatation[8] = rotate(angles[8], 1, 0, 0);
+	Rotatation[8] = rotate(angles[8], 1, 0, 0) * Rotatation[2];
 
 	//	位移medel到(0,0,0)使得rotate輕鬆
 	Translation[8] = translate(-1, -2.344, 0);
@@ -585,6 +671,9 @@ void ActionMenuEvents(int option){
 		break;
 	case 1:
 		action = WALK;
+		break;
+	case 2:
+		action = DANCE;
 		break;
 	}
 }

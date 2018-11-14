@@ -47,7 +47,7 @@ mat4 rotate(float angle,float x,float y,float z);
 void Obj2Buffer();
 void load2Buffer( char* obj,int);
 
-void attack(int);
+void dance(int);
 void walk(int);
 void resetObj(int);
 
@@ -94,7 +94,9 @@ mat4 Models[PARTSNUM];
 #define rightHand 1
 #define leftFoot 2
 #define rightFoot 3
+#define DANCE 2
 #define WALK 1
 #define IDLE 0
 int mode;
 int action;
+int hand_rotate[4];

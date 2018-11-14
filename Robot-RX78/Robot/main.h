@@ -47,7 +47,7 @@ mat4 rotate(float angle,float x,float y,float z);
 void Obj2Buffer();
 void load2Buffer( char* obj,int);
 
-void updateObj(int);
+void walk(int);
 void resetObj(int);
 
 bool isFrame;

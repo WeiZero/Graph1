@@ -47,7 +47,7 @@ int main(int argc, char** argv){
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	//與右鍵關聯
 
 	glutMouseFunc(Mouse);
-	glutTimerFunc (100, idle, 0); 
+	glutTimerFunc (50, idle, 0); 
 	glutMainLoop();
 	return 0;
 }
@@ -63,9 +63,9 @@ void idle(int dummy){
 	isFrame = true;
 	int out = 0;
 	if(action == WALK){
-		updateObj(dummy);
+		walk(dummy);
 		out = dummy+1;
-		if(out > 12) out = 1;
+		if(out > 13) out = 1;
 	}
 	else if(action == IDLE){
 		resetObj(dummy);
@@ -73,54 +73,70 @@ void idle(int dummy){
 	}
 	glutPostRedisplay();
 	
-	glutTimerFunc (150, idle, out); 
+	glutTimerFunc (50, idle, out); 
 }
 void resetObj(int f){
 	for(int i = 0 ; i < PARTSNUM;i++){
 		angles[i] = 0.0f;
 	}	
 }
-void updateObj(int frame){
+void walk(int frame){
 	switch(frame){
 	case 0:
-		//左手
-		angles[2] = -45;
-		//右手
-
-		//腿
-		angles[13] = 45;	
-		
+		angles[7] = 45;
+		angles[8] = -55;
 		break;
 	case 1:
+		angles[7] = 30;
+		angles[8] = -45;
+		break;
 	case 2:
+		angles[7] = 15;
+		angles[8] = -30;
+		break;
 	case 3:
-		angles[1] +=10;
-		angles[12] -=15;
-		position += 0.1;
+		angles[7] = 0;
+		angles[8] = -15;
 		break;
 	case 4:
+		angles[7] = -15;
+		angles[8] = 0;
+		break;
 	case 5:
+		angles[7] = -30;
+		angles[8] = 15;
+		break;
 	case 6:
-		angles[1] -=10;
-		angles[12] +=15;
-		angles[13] -= 15;
-		position -= 0.1;
+		angles[8] = -45;
+		angles[8] = 30;
 		break;
 	case 7:
+		angles[8] = -55;
+		angles[8] = 45;
+		break;
 	case 8:
+		angles[7] = -45;
+		angles[8] = 30;
+		break;
 	case 9:
-		angles[1] -=10;
-		angles[12] +=15;
-		angles[13] = 0;
-		position += 0.1;
+		angles[7] = -30;
+		angles[8] = 15;
 		break;
 	case 10:
+		angles[7] = -15;
+		angles[8] = 0;
+		break;
 	case 11:
+		angles[7] = 0;
+		angles[8] = -15;
+		break;
 	case 12:
-		angles[1] +=10;
-		angles[12] -=15;
-		angles[13] += 15;
-		position -= 0.1;
+		angles[7] = 15;
+		angles[8] = -30;
+		break;
+	case 13:
+		angles[7] = 30;
+		angles[8] = -45;
 		break;
 	}
 }
@@ -243,9 +259,9 @@ void display(){
 		//(location,vec3,type,固定點,連續點的偏移量,point)
 		offset[2] +=  normals_size[i]*sizeof(vec3);
 
-		int vertexIDoffset = 0;//glVertexID's offset 
-		string mtlname;//material name
-		vec3 Ks = vec3(1,1,1);//because .mtl excluding specular , so give it here.
+		int vertexIDoffset = 0;	//glVertexID's offset 
+		string mtlname;	//material name
+		vec3 Ks = vec3(1,1,1);	//because .mtl excluding specular , so give it here.
 		for(int j = 0;j <mtls[i].size() ;j++){//
 			mtlname = mtls[i][j];	
 			//find the material diffuse color in map:KDs by material name.
@@ -254,12 +270,12 @@ void display(){
 			//          (primitive   , glVertexID base , vertex count    )
 			glDrawArrays(GL_TRIANGLES, vertexIDoffset  , faces[i][j+1]*3);
 			//we draw triangles by giving the glVertexID base and vertex count is face count*3
-			vertexIDoffset += faces[i][j+1]*3;//glVertexID's base offset is face count*3
-		}//end for loop for draw one part of the robot	
+			vertexIDoffset += faces[i][j+1]*3;	//glVertexID's base offset is face count*3
+		}	//end for loop for draw one part of the robot	
 		
-	}//end for loop for updating and drawing model
-	glFlush();//強制執行上次的OpenGL commands
-	glutSwapBuffers();//調換前台和後台buffer ,當後臺buffer畫完和前台buffer交換使我們看見它
+	}	//end for loop for updating and drawing model
+	glFlush();	//強制執行上次的OpenGL commands
+	glutSwapBuffers();	//調換前台和後台buffer ,當後臺buffer畫完和前台buffer交換使我們看見它
 }
 
 void Obj2Buffer(){
@@ -346,13 +362,10 @@ void updateModels(){
 	}
 	float r,pitch,yaw,roll;
 	float alpha, beta ,gamma;
-	float t = glutGet(GLUT_ELAPSED_TIME) * 0.045f;
 	//=============================================================
-	//左腳
-	alpha = angles[8]; gamma = 10;
-
+	//左腳(8)
 	// 先讓他隨時間繞著X轉
-	Rotatation[8] = rotate(t, 1, 0, 0);
+	Rotatation[8] = rotate(angles[8], 1, 0, 0);
 
 	//	位移medel到(0,0,0)使得rotate輕鬆
 	Translation[8] = translate(-1, -2.344, 0);
@@ -361,95 +374,22 @@ void updateModels(){
 	Models[8] =  Rotatation[8] * Translation[8] * Models[8];
 
 	//	使model回到原本位置
-	//	7 為暫時借用事後找別的代替
-	Translation[7] = translate(1, 2.344, 0);
-	Models[8] =  Translation[7] * Models[8];
-	//右腳
+	Translation[8] = translate(1, 2.344, 0);
+	Models[8] =  Translation[8] * Models[8];
+	//右腳(7)
+	Rotatation[7] = rotate(angles[7], 1, 0, 0);
+
+	//	位移medel到(0,0,0)使得rotate輕鬆
+	Translation[7] = translate(1, -2.344, 0);
+
+	// 旋轉model
+	Models[7] = Rotatation[7] * Translation[7] * Models[7];
+
+	//	使model回到原本位置
+	Translation[7] = translate(-1, 2.344, 0);
+	Models[7] = Translation[7] * Models[7];
 
 	//=============================================================
-
-	/*
-	//Body
-	beta = angle;
-	Rotatation[0] = rotate(beta,0,1,0);
-	Translation[0] = translate(0,2.9+position,0);
-	Models[0] = Translation[0]*Rotatation[0];
-	//左手=======================================================
-	//左上手臂
-	yaw = DOR(beta);r = 3.7;
-	alpha = angles[1];
-	gamma = 10;
-	Rotatation[1] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);//向前旋轉*向右旋轉
-	Translation[1] = translate(3.7,1,-0.5);
-
-	Models[1] = Models[0]*Translation[1]*Rotatation[1];
-	
-	//左肩膀
-	Rotatation[4] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);//向前旋轉*向右旋轉
-	Translation[4] =translate(3.7,1,-0.5);//位移到左上手臂處
-	Models[4] =Models[0]*Translation[1]*Rotatation[1];
-	
-	//左下手臂
-	pitch = DOR(alpha);r = 3;
-	roll = DOR(gamma);
-	static int i=0;
-	i+=5;
-	alpha = angles[2]-20;
-	//上手臂+下手臂向前旋轉*向右旋轉
-	Rotatation[2] = rotate(alpha,1,0,0);
-	//延x軸位移以上手臂為半徑的圓周長:translate(0,r*cos,r*sin)
-	//延z軸位移以上手臂為半徑角度:translate(r*sin,-rcos,0)
-	Translation[2] = translate(0,-3,0);
-
-	Models[2] = Models[1]*Translation[2]*Rotatation[2];
-	
-
-	pitch = DOR(alpha);
-	//b = DOR(angles[2]);
-	roll = DOR(gamma);
-	//手掌角度與下手臂相同
-	//Rotatation[3] = Rotatation[2];
-	//延x軸位移以上手臂為半徑的圓周長:translate(0,r*cos,r*sin) ,角度為上手臂+下手臂
-	Translation[3] = translate(0,-4.8,0);
-	Models[3] = Models[2]*Translation[3]*Rotatation[3];
-	//============================================================
-	//頭==========================================================
-	Translation[5] = translate(0,3.9,-0.5);
-	Models[5] = Models[0]*Translation[5]*Rotatation[5];
-	//============================================================
-	//右手=========================================================
-	gamma = -10;alpha = angles[6] = -angles[1];
-	Rotatation[6] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);
-	Translation[6] = translate(-3.9,1.7,-0.2);
-	Models[6] = Models[0]*Translation[6]*Rotatation[6];
-
-	Rotatation[9] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);
-	Translation[9] = translate(-3.9,1.1,-0.2);
-	Models[9] = Models[0]*Translation[9]*Rotatation[9];
-
-	angles[7] = angles[2];
-	pitch = DOR(alpha);r = -3;
-	roll = DOR(gamma);
-	alpha = angles[7]-20;
-	Rotatation[7] = rotate(alpha,1,0,0);
-	Translation[7] = translate(0,-3,0);
-	Models[7] = Models[6]*Translation[7]*Rotatation[7];
-
-	pitch = DOR(alpha);
-	//b = DOR(angles[7]);
-	roll = DOR(gamma);
-	Translation[8] =translate(0,-6,0);
-	Models[8] = Models[7]*Translation[8]*Rotatation[8];
-	//=============================================================
-	//back&DBody===================================================
-	Translation[10] =translate(0,2,-4.5);
-	Models[10] = Models[0]*Translation[10]*Rotatation[10];
-
-	Translation[11] =translate(0,-5.3,0);
-	Models[11] = Models[0]*Translation[11]*Rotatation[11];
-
-
-	*/
 }
 
 void load2Buffer(char* obj,int i){

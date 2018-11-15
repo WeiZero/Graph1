@@ -47,7 +47,7 @@ mat4 rotate(float angle,float x,float y,float z);
 void Obj2Buffer();
 void load2Buffer( char* obj,int);
 
-void attack(int);
+void dance(int);
 void walk(int);
 void resetObj(int);
 
@@ -65,6 +65,7 @@ GLuint nVBOs[PARTSNUM];
 GLuint program;
 GLuint programScreen;
 int pNo;
+
 
 float angles[PARTSNUM];
 float position = 0.0;
@@ -91,10 +92,7 @@ mat4 View;
 mat4 Model;
 mat4 Models[PARTSNUM];
 
-#define leftHand 0
-#define rightHand 1
-#define leftFoot 2
-#define rightFoot 3
+#define DANCE 2
 #define WALK 1
 #define IDLE 0
 
@@ -102,8 +100,11 @@ mat4 Models[PARTSNUM];
 #define MOSAIC 1
 int mode;
 int action;
+int hand_rotate[4];
 
-unsigned int quadVAO, quadVBO;
-unsigned int framebuffer;
-unsigned int textureColorbuffer;
-unsigned int rbo;
+GLuint quadVAO, quadVBO;
+GLuint framebuffer;
+GLuint textureColorbuffer;
+GLuint renderbuffer;
+
+GLuint width, height;

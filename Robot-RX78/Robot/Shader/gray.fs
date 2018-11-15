@@ -1,17 +1,14 @@
 #version 410 core                                                              
 
-uniform sampler2D tex;                                                         
+out vec4 FragColor;
 
-out vec4 color;                                                                
+in vec2 TexCoords;
 
-in VS_OUT                                                                      
-{                                                                              
-vec2 texcoord;                                                             
-} fs_in;                                                                       
+uniform sampler2D screenTexture;                                           
 
 void main(void)                                                                
 {                                                                              
-	vec4 texture_color = texture(tex, fs_in.texcoord);							
+	vec4 texture_color = texture(screenTexture, TexCoords);							
 	float grayscale_color = 0.299*texture_color.r + 0.587*texture_color.g + 0.114*texture_color.b;
-	color = vec4(grayscale_color, grayscale_color, grayscale_color, 1.0);
+	FragColor = vec4(grayscale_color, grayscale_color, grayscale_color, 1.0);
 }                                                                              

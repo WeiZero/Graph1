@@ -42,8 +42,9 @@ int main(int argc, char** argv){
 
 	ShaderMenu = glutCreateMenu(ShaderMenuEvents);//建立右鍵菜單
 	//加入右鍵物件
-	glutAddMenuEntry("base", BASE);
-	glutAddMenuEntry("mosaic", MOSAIC);
+	glutAddMenuEntry("Base", BASE);
+	glutAddMenuEntry("Gray", GRAY);
+	glutAddMenuEntry("Negative", NEGATIVE);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
@@ -52,6 +53,7 @@ int main(int argc, char** argv){
 	//加入右鍵物件
 	glutAddSubMenu("action",ActionMenu);
 	glutAddSubMenu("mode",ModeMenu);
+	glutAddSubMenu("shader", ShaderMenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	//與右鍵關聯
 
 	glutMouseFunc(Mouse);
@@ -338,6 +340,15 @@ void dance(int frame) {
 
  }
 
+ GLuint initShaders(string v,string f)
+ {
+	 ShaderInfo shaders[] = {
+		 { GL_VERTEX_SHADER, v.c_str() },//vertex shader
+		 { GL_FRAGMENT_SHADER, f.c_str() },//fragment shader
+		 { GL_NONE, NULL } };
+	return LoadShaders(shaders);//讀取shader
+ }
+
 void init(){
 	isFrame = false;
 	pNo = 0;
@@ -348,22 +359,11 @@ void init(){
 	glGenVertexArrays(1,&VAO);
 	glBindVertexArray(VAO);
 
-	/*ShaderInfo shaders[] = {
-		{ GL_VERTEX_SHADER, "DSPhong_Material.vp" },//vertex shader
-		{ GL_FRAGMENT_SHADER, "DSPhong_Material.fp" },//fragment shader
-		{ GL_NONE, NULL }};
-	program = LoadShaders(shaders);//讀取shader*/
-	ShaderInfo shaders[] = {
-		{ GL_VERTEX_SHADER, "Shader/DSPhong_Material.vp" },//vertex shader
-		{ GL_FRAGMENT_SHADER, "Shader/DSPhong_Material.fp" },//fragment shader
-		{ GL_NONE, NULL } };
-	program = LoadShaders(shaders);//讀取shader
+	program = initShaders("Shader/DSPhong_Material.vp", "Shader/DSPhong_Material.fp");
 
-	ShaderInfo shadersScreen[] = {
-		{ GL_VERTEX_SHADER, "Shader/FBO_Screen.vs" },//vertex shader
-		{ GL_FRAGMENT_SHADER, "Shader/FBO_Screen.fs" },//fragment shader
-		{ GL_NONE, NULL } };
-	programScreen = LoadShaders(shadersScreen);//讀取shader
+	programScreen[0] = initShaders("Shader/FBO_Screen.vs", "Shader/Base.fs");
+	programScreen[1] = initShaders("Shader/FBO_Screen.vs", "Shader/Gray.fs");
+	programScreen[2] = initShaders("Shader/FBO_Screen.vs", "Shader/Negative.fs");
 
 	glUseProgram(program);//uniform參數數值前必須先use shader
 	
@@ -492,7 +492,7 @@ void display(){
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glUseProgram(programScreen);
+	glUseProgram(programScreen[shader]);
 	glBindVertexArray(quadVAO);
 	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
 	glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -784,5 +784,6 @@ void ModeMenuEvents(int option){
 	}
 }
 void ShaderMenuEvents(int option){
-	pNo = option;
+	if (shader != option)
+		shader = option;
 }

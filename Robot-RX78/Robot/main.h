@@ -16,7 +16,7 @@ using namespace std;
 using namespace glm;
 
 
-
+#define SHADERSUM 3
 #define PARTSNUM 9
 #define BODY 0
 #define LEFTSHOUDER 1
@@ -63,7 +63,7 @@ GLuint VBOs[PARTSNUM];
 GLuint uVBOs[PARTSNUM];
 GLuint nVBOs[PARTSNUM];
 GLuint program;
-GLuint programScreen;
+GLuint programScreen[SHADERSUM];
 int pNo;
 
 
@@ -97,9 +97,12 @@ mat4 Models[PARTSNUM];
 #define IDLE 0
 
 #define BASE 0
-#define MOSAIC 1
+#define GRAY 1
+#define NEGATIVE 2
+
 int mode;
 int action;
+int shader = 0;
 int hand_rotate[4];
 
 GLuint quadVAO, quadVBO;

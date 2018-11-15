@@ -1,23 +1,10 @@
-Ôªø#include "main.h"
+#include "main.h"
 
-GLuint          window_vao;
-GLuint			window_buffer;
-GLuint			FBO;
-GLuint			depthRBO;
-GLuint			FBODataTexture;
-
-static const GLfloat window_positions[] =
-{
-	1.0f,-1.0f,1.0f,0.0f,
-	-1.0f,-1.0f,0.0f,0.0f,
-	-1.0f,1.0f,0.0f,1.0f,
-	1.0f,1.0f,1.0f,1.0f
-};
 vec3 camera = vec3(0,0,20);
 int main(int argc, char** argv){
 	glutInit(&argc, argv);
-	glutInitContextVersion(4,3);//‰ª•OpenGL version4.3ÁâàÊú¨ÁÇ∫Âü∫Ê∫ñ
-	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);//ÊòØÂê¶Âêë‰∏ãÁõ∏ÂÆπ,GLUT_FORWARD_COMPATIBLE‰∏çÊîØÊè¥(?
+	glutInitContextVersion(4,3);//•HOpenGL version4.3™©•ª¨∞∞Ú∑«
+	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);//¨Oß_¶V§U¨€Æe,GLUT_FORWARD_COMPATIBLE§£§‰¥©(?
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 
 	//multisample for golygons smooth
@@ -25,7 +12,7 @@ int main(int argc, char** argv){
 	glutInitWindowSize(800, 600);
 	glutCreateWindow("OpenGL 4.3 - Robot");
 
-	glewExperimental = GL_TRUE; //ÁΩÆÊñºglewInit()‰πãÂâç
+	glewExperimental = GL_TRUE; //∏m©ÛglewInit()§ß´e
 	if (glewInit()) {
 		std::cerr << "Unable to initialize GLEW ... exiting" << std::endl;//c error
 		exit(EXIT_FAILURE);
@@ -40,28 +27,34 @@ int main(int argc, char** argv){
 	glutReshapeFunc(ChangeSize);
 	glutKeyboardFunc(Keyboard);
 	int ActionMenu,ModeMenu,ShaderMenu;
-	ActionMenu = glutCreateMenu(ActionMenuEvents);//Âª∫Á´ãÂè≥ÈçµËèúÂñÆ
-	//Âä†ÂÖ•Âè≥ÈçµÁâ©‰ª∂
+	ActionMenu = glutCreateMenu(ActionMenuEvents);//´ÿ•ﬂ•k¡‰µÊ≥Ê
+	//•[§J•k¡‰™´•Û
 	glutAddMenuEntry("idle",0);
 	glutAddMenuEntry("walk",1);
-	glutAddMenuEntry("dance", 2);
-	glutAttachMenu(GLUT_RIGHT_BUTTON);	//ËàáÂè≥ÈçµÈóúËÅØ
+	glutAttachMenu(GLUT_RIGHT_BUTTON);	//ªP•k¡‰√ˆ¡p
 
-	ModeMenu = glutCreateMenu(ModeMenuEvents);//Âª∫Á´ãÂè≥ÈçµËèúÂñÆ
-	//Âä†ÂÖ•Âè≥ÈçµÁâ©‰ª∂
+	ModeMenu = glutCreateMenu(ModeMenuEvents);//´ÿ•ﬂ•k¡‰µÊ≥Ê
+	//•[§J•k¡‰™´•Û
 	glutAddMenuEntry("Line",0);
 	glutAddMenuEntry("Fill",1);
-	glutAttachMenu(GLUT_RIGHT_BUTTON);	//ËàáÂè≥ÈçµÈóúËÅØ
+	glutAttachMenu(GLUT_RIGHT_BUTTON);	//ªP•k¡‰√ˆ¡p
+
+	ShaderMenu = glutCreateMenu(ShaderMenuEvents);//´ÿ•ﬂ•k¡‰µÊ≥Ê
+	//•[§J•k¡‰™´•Û
+	glutAddMenuEntry("base", BASE);
+	glutAddMenuEntry("mosaic", MOSAIC);
+
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 
-	glutCreateMenu(menuEvents);//Âª∫Á´ãÂè≥ÈçµËèúÂñÆ
-	//Âä†ÂÖ•Âè≥ÈçµÁâ©‰ª∂
+	glutCreateMenu(menuEvents);//´ÿ•ﬂ•k¡‰µÊ≥Ê
+	//•[§J•k¡‰™´•Û
 	glutAddSubMenu("action",ActionMenu);
 	glutAddSubMenu("mode",ModeMenu);
-	glutAttachMenu(GLUT_RIGHT_BUTTON);	//ËàáÂè≥ÈçµÈóúËÅØ
+	glutAttachMenu(GLUT_RIGHT_BUTTON);	//ªP•k¡‰√ˆ¡p
 
 	glutMouseFunc(Mouse);
-	glutTimerFunc (75, idle, 0); 
+	glutTimerFunc (50, idle, 0); 
 	glutMainLoop();
 	return 0;
 }
@@ -69,25 +62,6 @@ void ChangeSize(int w,int h){
 	if(h == 0) h = 1;
 	glViewport(0,0,w,h);
 	Projection = perspective(80.0f,(float)w/h,0.1f,100.0f);
-
-	glDeleteRenderbuffers(1, &depthRBO);
-	glDeleteTextures(1, &FBODataTexture);
-	glGenRenderbuffers(1, &depthRBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthRBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, w, h);
-
-	glGenTextures(1, &FBODataTexture);
-	glBindTexture(GL_TEXTURE_2D, FBODataTexture);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBODataTexture, 0);
 }
 void Mouse(int button,int state,int x,int y){
 	if(button == 2) isFrame = false;
@@ -98,33 +72,26 @@ void idle(int dummy){
 	if(action == WALK){
 		walk(dummy);
 		out = dummy+1;
-		if(out > 13) out = 0;
+		if(out > 13) out = 1;
 	}
 	else if(action == IDLE){
 		resetObj(dummy);
 		out = 0;
 	}
-	else if (action == DANCE) {
-		dance(dummy);
-		out = dummy + 1;
-		if (out > 13) out = 0;
-	}
 	glutPostRedisplay();
 	
-	glutTimerFunc (75, idle, out); 
+	glutTimerFunc (50, idle, out); 
 }
 
 void resetObj(int f){
-	for(int i = 0 ; i < PARTSNUM;i++)
+	for(int i = 0 ; i < PARTSNUM;i++){
 		angles[i] = 0.0f;
-	for (int i = 0; i < 4; i++)
-		hand_rotate[i] = 0;
+	}	
 }
 
 void walk(int frame){
 	switch(frame){
 	case 0:
-		resetObj(1);
 		angles[5] = -55;
 		angles[6] = 45;
 		angles[7] = 45;
@@ -163,13 +130,13 @@ void walk(int frame){
 	case 6:
 		angles[5] = 30;
 		angles[6] = -45;
-		angles[7] = -45;
+		angles[8] = -45;
 		angles[8] = 30;
 		break;
 	case 7:
 		angles[5] = 45;
 		angles[6] = -55;
-		angles[7] = -55;
+		angles[8] = -55;
 		angles[8] = 45;
 		break;
 	case 8:
@@ -211,90 +178,27 @@ void walk(int frame){
 	}
 }
 
-void dance(int frame) {
+void attack(int frame) {
 
 	switch (frame) {
-	case 0:
-		resetObj(1);
-		angles[0] = -60;
-		angles[1] = -30;
-		angles[3] = 20;
-		angles[5] = 50;
-		hand_rotate[2] = -30;
-		hand_rotate[3] = -30;
-		break;
 	case 1:
-		angles[1] = -60;
-		angles[3] = -15;
-		angles[5] = 25;
 		break;
 	case 2:
-		angles[3] = -30;
-		hand_rotate[1] = -30;
-		break;
-	case 3:
-		angles[3] = -60;
-		break;
-	case 4:
-		angles[3] = -30;
-		hand_rotate[1] = 0;
-		break;
-	case 5:
-		angles[0] = -30;
-		angles[1] = -30;
-		angles[3] = -15;
-		angles[5] = 15;
-		break;
-	case 6:
-		angles[0] = 0;
-		angles[1] = 0;
-		angles[3] = 0;
-		angles[5] = 0;
-		hand_rotate[2] = 0;
-		hand_rotate[3] = 0;
-		break;
-	case 7:
-		angles[0] = 60;
-		angles[1] = 30;
-		angles[4] = 20;
-		angles[6] = 50;
-		hand_rotate[0] = -30;
-		hand_rotate[1] = -30;
-		break;
-	case 8:
-		angles[1] = 60;
-		angles[4] = -15;
-		angles[6] = 25;
-		break;
-	case 9:
-		angles[4] = -30;
-		hand_rotate[3] = -30;
-		break;
-	case 10:
-		angles[4] = -60;
-		break;
-	case 11:
-		angles[4] = -30;
-		hand_rotate[3] = 0;
-		break;
-	case 12:
-		angles[0] = -30;
-		angles[1] = -30;
-		angles[4] = -15;
-		angles[6] = 15;
-		break;
-	case 13:
-		angles[0] = 0;
-		angles[1] = 0;
-		angles[4] = 0;
-		angles[6] = 0;
-		hand_rotate[0] = 0;
-		hand_rotate[1] = 0;
 		break;
 	}
 
 }
 
+float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+	// positions   // texCoords
+	-1.0f,  1.0f,  0.0f, 1.0f,
+	-1.0f, -1.0f,  0.0f, 0.0f,
+	 1.0f, -1.0f,  1.0f, 0.0f,
+
+	-1.0f,  1.0f,  0.0f, 1.0f,
+	 1.0f, -1.0f,  1.0f, 0.0f,
+	 1.0f,  1.0f,  1.0f, 1.0f
+};
 
  GLuint M_KaID;
  GLuint M_KdID;
@@ -303,29 +207,43 @@ void dance(int frame) {
 void init(){
 	isFrame = false;
 	pNo = 0;
-	for(int i = 0;i<PARTSNUM;i++)//ÂàùÂßãÂåñËßíÂ∫¶Èô£Âàó
+	for(int i = 0;i<PARTSNUM;i++)//™Ï©l§∆®§´◊∞}¶C
 		angles[i] = 0.0;
 
 	//VAO
 	glGenVertexArrays(1,&VAO);
 	glBindVertexArray(VAO);
-	//======================================================
-	// program
-	ShaderInfo shaders[] = {
+
+	/*ShaderInfo shaders[] = {
 		{ GL_VERTEX_SHADER, "DSPhong_Material.vp" },//vertex shader
 		{ GL_FRAGMENT_SHADER, "DSPhong_Material.fp" },//fragment shader
 		{ GL_NONE, NULL }};
-	program = LoadShaders(shaders);//ËÆÄÂèñshader
+	program = LoadShaders(shaders);//≈™®˙shader*/
+	ShaderInfo shaders[] = {
+		{ GL_VERTEX_SHADER, "DSPhong_Material.vp" },//vertex shader
+		{ GL_FRAGMENT_SHADER, "DSPhong_Material.fp" },//fragment shader
+		{ GL_NONE, NULL } };
+	program = LoadShaders(shaders);//≈™®˙shader
 
-	glUseProgram(program);//uniformÂèÉÊï∏Êï∏ÂÄºÂâçÂøÖÈ†àÂÖàuse shader
+	ShaderInfo shadersScreen[] = {
+		{ GL_VERTEX_SHADER, "Shader/FBO_Screen.vs" },//vertex shader
+		{ GL_FRAGMENT_SHADER, "Shader/FBO_Screen.fs" },//fragment shader
+		{ GL_NONE, NULL } };
+	programScreen = LoadShaders(shadersScreen);//≈™®˙shader
+
+	glUseProgram(program);//uniform∞—º∆º∆≠»´e•≤∂∑•˝use shader
 	
 	MatricesIdx = glGetUniformBlockIndex(program,"MatVP");
 	ModelID =  glGetUniformLocation(program,"Model");
     M_KaID = glGetUniformLocation(program,"Material.Ka");
 	M_KdID = glGetUniformLocation(program,"Material.Kd");
 	M_KsID = glGetUniformLocation(program,"Material.Ks");
+	//or
+	M_KdID = M_KaID+1;
+	M_KsID = M_KaID+2;
 
 	Projection = glm::perspective(80.0f,4.0f/3.0f,0.1f,100.0f);
+	//glm::mat4 Projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f); // In world coordinates
 	
 	// Camera matrix
 	View       = glm::lookAt(
@@ -347,41 +265,53 @@ void init(){
 	glBindBufferRange(GL_UNIFORM_BUFFER,0,UBO,0,UBOsize);
 	glUniformBlockBinding(program, MatricesIdx,0);
 
-	//======================================================
-	// program2 
-	ShaderInfo gray_shader[] = {
-		{ GL_VERTEX_SHADER, "gray.vs" },//vertex shader
-		{ GL_FRAGMENT_SHADER, "gray.fs" },//fragment shader
-		{ GL_NONE, NULL }};
-	/*
-	program2 = LoadShaders(gray_shader);
-	glGenVertexArrays(1, &window_vao);
-	glBindVertexArray(window_vao);
+	// screen quad VAO
 
-	glGenBuffers(1, &window_buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, window_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(window_positions), window_positions, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 4, 0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 4, (const GLvoid*)(sizeof(GLfloat) * 2));
-
+	glGenVertexArrays(1, &quadVAO);
+	glGenBuffers(1, &quadVBO);
+	glBindVertexArray(quadVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-	glGenFramebuffers(1, &FBO);
-	*/
-	//======================================================
 	glClearColor(0.0,0.0,0.0,1);//black screen
+	
+	glGenFramebuffers(1, &framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	// create a color attachment texture
+
+	glGenTextures(1, &textureColorbuffer);
+	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+	// create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+
+	glGenRenderbuffers(1, &rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600); // use a single renderbuffer object for both a depth AND stencil buffer.
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+	// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 #define DOR(angle) (angle*3.1415/180);
 void display(){
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
+
+	// make sure we clear the framebuffer's content
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	//glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-	//======================================================
-	// program
+
 	glBindVertexArray(VAO);
-	glUseProgram(program);//uniformÂèÉÊï∏Êï∏ÂÄºÂâçÂøÖÈ†àÂÖàuse shader
+	glUseProgram(program);//uniform∞—º∆º∆≠»´e•≤∂∑•˝use shader
 	float eyey = DOR(eyeAngley);
 	View       = lookAt(
 		               vec3(eyedistance*sin(eyey),2,eyedistance*cos(eyey)) , // Camera is at (0,0,20), in World Space
@@ -408,7 +338,7 @@ void display(){
 							  GL_FALSE,			//not normalized
 							  0,				//strip
 							  (void*)offset[0]);//buffer offset
-		//(location,vec3,type,Âõ∫ÂÆöÈªû,ÈÄ£Á∫åÈªûÁöÑÂÅèÁßªÈáè,buffer point)
+		//(location,vec3,type,©T©w¬I,≥sƒÚ¬I™∫∞æ≤æ∂q,buffer point)
 		offset[0] +=  vertices_size[i]*sizeof(vec3);
 
 		// 2nd attribute buffer : UVs
@@ -420,7 +350,7 @@ void display(){
 							  GL_FALSE, 
 							  0,
 							  (void*)offset[1]);
-		//(location,vec2,type,Âõ∫ÂÆöÈªû,ÈÄ£Á∫åÈªûÁöÑÂÅèÁßªÈáè,point)
+		//(location,vec2,type,©T©w¬I,≥sƒÚ¬I™∫∞æ≤æ∂q,point)
 		offset[1] +=  uvs_size[i]*sizeof(vec2);
 
 		// 3rd attribute buffer : normals
@@ -432,7 +362,7 @@ void display(){
 							  GL_FALSE, 
 							  0,
 							  (void*)offset[2]);
-		//(location,vec3,type,Âõ∫ÂÆöÈªû,ÈÄ£Á∫åÈªûÁöÑÂÅèÁßªÈáè,point)
+		//(location,vec3,type,©T©w¬I,≥sƒÚ¬I™∫∞æ≤æ∂q,point)
 		offset[2] +=  normals_size[i]*sizeof(vec3);
 
 		int vertexIDoffset = 0;	//glVertexID's offset 
@@ -443,6 +373,7 @@ void display(){
 			//find the material diffuse color in map:KDs by material name.
 			glUniform3fv(M_KdID,1,&KDs[mtlname][0]);
 			glUniform3fv(M_KsID,1,&Ks[0]);
+			
 			//          (primitive   , glVertexID base , vertex count    )
 			glDrawArrays(GL_TRIANGLES, vertexIDoffset  , faces[i][j+1]*3);
 			//we draw triangles by giving the glVertexID base and vertex count is face count*3
@@ -450,22 +381,20 @@ void display(){
 		}	//end for loop for draw one part of the robot	
 		
 	}	//end for loop for updating and drawing model
-	
-	//======================================================
-	// program2
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
-	/*
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, FBODataTexture);
-	glBindVertexArray(window_vao);
-	glUseProgram(program2);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);*/
-	//======================================================
 
-	glFlush();	//Âº∑Âà∂Âü∑Ë°å‰∏äÊ¨°ÁöÑOpenGL commands
-	glutSwapBuffers();	//Ë™øÊèõÂâçÂè∞ÂíåÂæåÂè∞buffer ,Áï∂ÂæåËá∫bufferÁï´ÂÆåÂíåÂâçÂè∞buffer‰∫§Êèõ‰ΩøÊàëÂÄëÁúãË¶ãÂÆÉ
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
+	// clear all relevant buffers
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glUseProgram(programScreen);
+	glBindVertexArray(quadVAO);
+	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glFlush();	//±j®Ó∞ı¶Ê§W¶∏™∫OpenGL commands
+	glutSwapBuffers();	//Ω’¥´´e•x©M´·•xbuffer ,∑Ì´·ªObufferµeßπ©M´e•xbuffer•Ê¥´®œß⁄≠Ã¨›®£•¶
 }
 
 void Obj2Buffer(){
@@ -504,14 +433,14 @@ void Obj2Buffer(){
 	glGenBuffers(1,&VBO);
 	glGenBuffers(1,&uVBO);
 	glGenBuffers(1,&nVBO);
-	//bind vbo ,Á¨¨‰∏ÄÊ¨°bind‰πüÂêåÁ≠âÊñº create vbo 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);//VBOÁöÑtargetÊòØGL_ARRAY_BUFFER
+	//bind vbo ,≤ƒ§@¶∏bind§]¶Pµ•©Û create vbo 
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);//VBO™∫target¨OGL_ARRAY_BUFFER
 	glBufferData(GL_ARRAY_BUFFER,totalSize[0],NULL,GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, uVBO);//VBOÁöÑtargetÊòØGL_ARRAY_BUFFER
+	glBindBuffer(GL_ARRAY_BUFFER, uVBO);//VBO™∫target¨OGL_ARRAY_BUFFER
 	glBufferData(GL_ARRAY_BUFFER,totalSize[1],NULL,GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, nVBO);//VBOÁöÑtargetÊòØGL_ARRAY_BUFFER
+	glBindBuffer(GL_ARRAY_BUFFER, nVBO);//VBO™∫target¨OGL_ARRAY_BUFFER
 	glBufferData(GL_ARRAY_BUFFER,totalSize[2],NULL,GL_STATIC_DRAW);
 	
 	
@@ -543,7 +472,6 @@ void Obj2Buffer(){
 }
 
 void updateModels(){
-
 	mat4 Rotatation[PARTSNUM];
 	mat4 Translation[PARTSNUM];
 	for(int i = 0 ; i < PARTSNUM;i++){
@@ -552,74 +480,74 @@ void updateModels(){
 		Translation[i] = mat4(1.0f); 
 	}
 	//=============================================================
-	//	È†≠(0)
-	Rotatation[0] = rotate(angles[0], 0, 1, 0);
+	//	¿Y(0)
+	Rotatation[0] = rotate(angles[0], 1, 0, 0);
 	Translation[0] = translate(0, -11, -1.5);
 	Models[0] = Rotatation[0] * Translation[0] * Models[0];
 	Translation[0] = translate(0, 11, 1.5);
 	Models[0] = Translation[0] * Models[0];
 	//=============================================================
-	//	Ë∫´È´î(1)
-	Rotatation[1] = rotate(angles[1], 0, 1, 0);
+	//	®≠≈È(1)
+	Rotatation[1] = rotate(angles[1], 1, 0, 0);
 	Translation[1] = translate(0, -7, 0);
 	Models[1] = Rotatation[1] * Translation[1] * Models[1];
 	Translation[1] = translate(0, 7, 0);
 	Models[1] = Translation[1] * Models[1];
 	//=============================================================
-	//	Â±ÅËÇ°(2)
-	Rotatation[2] = rotate(angles[2], 0, 1, 0);
+	//	ßæ™—(2)
+	Rotatation[2] = rotate(angles[2], 1, 0, 0);
 	Translation[2] = translate(0, -3.5, 0);
 	Models[2] = Rotatation[2] * Translation[2] * Models[2];
 	Translation[2] = translate(0, 3.5, 0);
 	Models[2] = Translation[2] * Models[2];
 	//=============================================================
-	//	Âè≥ËÇ©(3)
-	Rotatation[3] = rotate(angles[3], 1, 0, 0) * Rotatation[1];
+	//	•k™”(3)
+	Rotatation[3] = rotate(angles[3], 1, 0, 0);
 	Translation[3] = translate(5, -9, -1.2);
 	Models[3] = Rotatation[3] * Translation[3] * Models[3];
 	Translation[3] = translate(-5, 9, 1.2);
 	Models[3] = Translation[3] * Models[3];
 	//=============================================================
-	//	Â∑¶ËÇ©(4)
-	Rotatation[4] = rotate(angles[4], 1, 0, 0) * Rotatation[1];
+	//	•™™”(4)
+	Rotatation[4] = rotate(angles[4], 1, 0, 0);
 	Translation[4] = translate(-5, -9, -1.2);
 	Models[4] = Rotatation[4] * Translation[4] * Models[4];
 	Translation[4] = translate(5, 9, 1.2);
 	Models[4] = Translation[4] * Models[4];
 	//=============================================================
-	//	Âè≥Êâã(5)
-	Rotatation[5] = rotate(hand_rotate[1], 0, 0, 1) * rotate(hand_rotate[0], 0, 1, 0) * rotate(angles[5], 1, 0, 0) * Rotatation[3];
+	//	•k§‚(5)
+	Rotatation[5] = rotate(angles[5], 1, 0, 0);
 	Translation[5] = translate(6.5, -5.5, -3);
 	Models[5] = Rotatation[5] * Translation[5] * Models[5];
 	Translation[5] = translate(-6.5, 5.5, 3);
 	Models[5] = Translation[5] * Models[5];
 	//=============================================================
-	//	Â∑¶Êâã(6)
-	Rotatation[6] = rotate(hand_rotate[3], 0, 0, 1) * rotate(hand_rotate[2], 0, 1, 0) * rotate(angles[6], 1, 0, 0) * Rotatation[4];
+	//	•™§‚(6)
+	Rotatation[6] = rotate(angles[6], 1, 0, 0);
 	Translation[6] = translate(-6.5, -5.5, -3);
 	Models[6] = Rotatation[6] * Translation[6] * Models[6];
 	Translation[6] = translate(6.5, 5.5, 3);
 	Models[6] = Translation[6] * Models[6];
 	//=============================================================
-	//	Âè≥ËÖ≥(7)
-	Rotatation[7] = rotate(angles[7], 1, 0, 0) * Rotatation[2];
+	//	•k∏}(7)
+	Rotatation[7] = rotate(angles[7], 1, 0, 0);
 	Translation[7] = translate(1, -2.344, 0);
 	Models[7] = Rotatation[7] * Translation[7] * Models[7];
 	Translation[7] = translate(-1, 2.344, 0);
 	Models[7] = Translation[7] * Models[7];
 
 	//=============================================================
-	//	Â∑¶ËÖ≥(8)
-	//	ÂÖàËÆì‰ªñÈö®ÊôÇÈñìÁπûËëóXËΩâ
-	Rotatation[8] = rotate(angles[8], 1, 0, 0) * Rotatation[2];
+	//	•™∏}(8)
+	//	•˝≈˝•L¿HÆ…∂°¬∂µ€X¬‡
+	Rotatation[8] = rotate(angles[8], 1, 0, 0);
 
-	//	‰ΩçÁßªmedelÂà∞(0,0,0)‰ΩøÂæórotateËºïÈ¨Ü
+	//	¶Ï≤æmedel®Ï(0,0,0)®œ±orotateª¥√P
 	Translation[8] = translate(-1, -2.344, 0);
 
-	//	ÊóãËΩâmodel
+	//	±€¬‡model
 	Models[8] = Rotatation[8] * Translation[8] * Models[8];
 
-	//	‰ΩømodelÂõûÂà∞ÂéüÊú¨‰ΩçÁΩÆ
+	//	®œmodel¶^®Ï≠Ï•ª¶Ï∏m
 	Translation[8] = translate(1, 2.344, 0);
 	Models[8] = Translation[8] * Models[8];
 	//=============================================================
@@ -641,7 +569,7 @@ void load2Buffer(char* obj,int i){
 	glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(vec3),&vertices[0],GL_STATIC_DRAW);
 	vertices_size[i] = vertices.size();
 
-	//(buffer type,dataËµ∑Âßã‰ΩçÁΩÆ,data size,data first ptr)
+	//(buffer type,data∞_©l¶Ï∏m,data size,data first ptr)
 	//vertices_size[i] = glm_model->numtriangles;
 	
 	//printf("vertices:%d\n",vertices_size[);
@@ -657,7 +585,7 @@ void load2Buffer(char* obj,int i){
 	normals_size[i] = normals.size();
 }
 mat4 translate(float x,float y,float z){
-	vec4 t = vec4(x,y,z,1);//w = 1 ,Ââáx,y,z=0ÊôÇ‰πüËÉΩtranslate
+	vec4 t = vec4(x,y,z,1);//w = 1 ,´hx,y,z=0Æ…§]Ø‡translate
 	vec4 c1 = vec4(1,0,0,0);
 	vec4 c2 = vec4(0,1,0,0);
 	vec4 c3 = vec4(0,0,1,0);
@@ -672,6 +600,7 @@ mat4 scale(float x,float y,float z){
 	mat4 M = mat4(c1,c2,c3,c4);
 	return M;
 }
+
 mat4 rotate(float angle,float x,float y,float z){
 	float r = DOR(angle);
 	mat4 M = mat4(1);
@@ -735,9 +664,6 @@ void ActionMenuEvents(int option){
 	case 1:
 		action = WALK;
 		break;
-	case 2:
-		action = DANCE;
-		break;
 	}
 }
 void ModeMenuEvents(int option){
@@ -753,4 +679,3 @@ void ModeMenuEvents(int option){
 void ShaderMenuEvents(int option){
 	pNo = option;
 }
-

@@ -47,6 +47,17 @@ int main(int argc, char** argv){
 	glutAddMenuEntry("Negative", NEGATIVE);
 	glutAddMenuEntry("Dither", DITHER);
 	glutAddMenuEntry("Blur", BLUR);
+	glutAddMenuEntry("Mosaic", MOSAIC);
+	glutAddMenuEntry("Curve", CURVE);
+	glutAddMenuEntry("7", 7);
+	glutAddMenuEntry("8", 8);
+	glutAddMenuEntry("9", 9);
+	glutAddMenuEntry("10", 10);
+	glutAddMenuEntry("11", 11);
+	glutAddMenuEntry("12", 12);
+	glutAddMenuEntry("13", 13);
+	glutAddMenuEntry("14", 14);
+	glutAddMenuEntry("15", 15);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 
@@ -363,10 +374,12 @@ void init(){
 	program = initShaders("Shader/DSPhong_Material.vp", "Shader/DSPhong_Material.fp");
 
 	programScreen[0] = initShaders("Shader/FBO_Screen.vs", "Shader/Base.fs");
-	programScreen[1] = initShaders("Shader/FBO_Screen.vs", "Shader/Gray.fs");
+	programScreen[1] = initShaders("Shader/FBO_Screen.vs", "Shader/gray.fs");
 	programScreen[2] = initShaders("Shader/FBO_Screen.vs", "Shader/Negative.fs");
 	programScreen[3] = initShaders("Shader/FBO_Screen.vs", "Shader/Dither.fs");
 	programScreen[4] = initShaders("Shader/FBO_Screen.vs", "Shader/Blur.fs");
+	programScreen[5] = initShaders("Shader/FBO_Screen.vs", "Shader/Mosaic.fs");
+	programScreen[6] = initShaders("Shader/FBO_Screen.vs", "Shader/Curve.fs");
 	glUseProgram(program);//uniform參數數值前必須先use shader
 	
 	MatricesIdx = glGetUniformBlockIndex(program,"MatVP");

@@ -374,7 +374,7 @@ void init(){
 	program = initShaders("Shader/DSPhong_Material.vp", "Shader/DSPhong_Material.fp");
 
 	programScreen[0] = initShaders("Shader/FBO_Screen.vs", "Shader/Base.fs");
-	programScreen[1] = initShaders("Shader/FBO_Screen.vs", "Shader/Gray.fs");
+	programScreen[1] = initShaders("Shader/FBO_Screen.vs", "Shader/Grayscale.fs");
 	programScreen[2] = initShaders("Shader/FBO_Screen.vs", "Shader/Negative.fs");
 	programScreen[3] = initShaders("Shader/FBO_Screen.vs", "Shader/Dither.fs");
 	programScreen[4] = initShaders("Shader/FBO_Screen.vs", "Shader/Blur.fs");

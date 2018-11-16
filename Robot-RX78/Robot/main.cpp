@@ -49,11 +49,11 @@ int main(int argc, char** argv){
 	glutAddMenuEntry("Blur", BLUR);
 	glutAddMenuEntry("Mosaic", MOSAIC);
 	glutAddMenuEntry("Curve", CURVE);
-	glutAddMenuEntry("7", 7);
-	glutAddMenuEntry("8", 8);
-	glutAddMenuEntry("9", 9);
-	glutAddMenuEntry("10", 10);
-	glutAddMenuEntry("11", 11);
+	glutAddMenuEntry("Noise", NOISE);
+	glutAddMenuEntry("Bling", BLING);
+	glutAddMenuEntry("Curve2", 9);
+	glutAddMenuEntry("Noise2", 10);
+	glutAddMenuEntry("Water", 11);
 	glutAddMenuEntry("12", 12);
 	glutAddMenuEntry("13", 13);
 	glutAddMenuEntry("14", 14);
@@ -380,6 +380,11 @@ void init(){
 	programScreen[4] = initShaders("Shader/FBO_Screen.vs", "Shader/Blur.fs");
 	programScreen[5] = initShaders("Shader/FBO_Screen.vs", "Shader/Mosaic.fs");
 	programScreen[6] = initShaders("Shader/FBO_Screen.vs", "Shader/Curve.fs");
+	programScreen[7] = initShaders("Shader/FBO_Screen.vs", "Shader/Noise.fs");
+	programScreen[8] = initShaders("Shader/FBO_Screen.vs", "Shader/Bling.fs");
+	programScreen[9] = initShaders("Shader/FBO_Screen.vs", "Shader/Curve2.fs");
+	programScreen[10] = initShaders("Shader/FBO_Screen.vs", "Shader/Noise2.fs");
+	programScreen[11] = initShaders("Shader/FBO_Screen.vs", "Shader/Water.fs");
 	glUseProgram(program);//uniform參數數值前必須先use shader
 	
 	MatricesIdx = glGetUniformBlockIndex(program,"MatVP");
@@ -508,6 +513,10 @@ void display(){
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glUseProgram(programScreen[shader]);
+	if (shader >= 7) {
+		GLint index = glGetUniformLocation(programScreen[shader], "time");
+		glUniform1f(index, glutGet(GLUT_ELAPSED_TIME));
+	}
 	glBindVertexArray(quadVAO);
 	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
 	glDrawArrays(GL_TRIANGLES, 0, 6);

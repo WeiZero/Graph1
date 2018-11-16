@@ -16,8 +16,8 @@ using namespace std;
 using namespace glm;
 
 
-#define SHADERSUM 20
-#define PARTSNUM 9
+#define SHADERSUM	20
+#define PARTSNUM	9
 
 void updateModels();
 
@@ -87,17 +87,20 @@ mat4 View;
 mat4 Model;
 mat4 Models[PARTSNUM];
 
-#define DANCE 2
-#define WALK 1
-#define IDLE 0
+#define DANCE		2
+#define WALK		1
+#define IDLE		0
 
-#define BASE 0
-#define GRAY 1
-#define NEGATIVE 2
-#define DITHER 3
-#define BLUR 4
-#define MOSAIC 5
-#define CURVE 6
+#define BASE		0
+#define GRAY		1
+#define NEGATIVE	2
+#define DITHER		3
+#define BLUR		4
+#define MOSAIC		5
+#define CURVE		6
+#define NOISE		7
+#define BLING		8
+
 int mode;
 int action;
 int shader = 0;

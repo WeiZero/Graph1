@@ -16,13 +16,8 @@ using namespace std;
 using namespace glm;
 
 
-#define SHADERSUM 3
+#define SHADERSUM 10
 #define PARTSNUM 9
-#define BODY 0
-#define LEFTSHOUDER 1
-#define ULEFTARM 2
-#define DLEFTARM 3
-#define LEFTHAND 4
 
 void updateModels();
 
@@ -99,6 +94,8 @@ mat4 Models[PARTSNUM];
 #define BASE 0
 #define GRAY 1
 #define NEGATIVE 2
+#define DITHER 3
+#define BLUR 4
 
 int mode;
 int action;

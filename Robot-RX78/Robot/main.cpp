@@ -45,7 +45,8 @@ int main(int argc, char** argv){
 	glutAddMenuEntry("Base", BASE);
 	glutAddMenuEntry("Gray", GRAY);
 	glutAddMenuEntry("Negative", NEGATIVE);
-
+	glutAddMenuEntry("Dither", DITHER);
+	glutAddMenuEntry("Blur", BLUR);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 
@@ -364,7 +365,8 @@ void init(){
 	programScreen[0] = initShaders("Shader/FBO_Screen.vs", "Shader/Base.fs");
 	programScreen[1] = initShaders("Shader/FBO_Screen.vs", "Shader/Gray.fs");
 	programScreen[2] = initShaders("Shader/FBO_Screen.vs", "Shader/Negative.fs");
-
+	programScreen[3] = initShaders("Shader/FBO_Screen.vs", "Shader/Dither.fs");
+	programScreen[4] = initShaders("Shader/FBO_Screen.vs", "Shader/Blur.fs");
 	glUseProgram(program);//uniform參數數值前必須先use shader
 	
 	MatricesIdx = glGetUniformBlockIndex(program,"MatVP");

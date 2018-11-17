@@ -49,7 +49,7 @@ int main(int argc, char** argv){
 	glutAddMenuEntry("Blur", BLUR);
 	glutAddMenuEntry("Mosaic", MOSAIC);
 	glutAddMenuEntry("Curve", CURVE);
-	glutAddMenuEntry("Curve2", 7);
+	glutAddMenuEntry("NPR", 7);
 	glutAddMenuEntry("Noise", NOISE);
 	glutAddMenuEntry("Noise2", 9);
 	glutAddMenuEntry("Bling", BLING);
@@ -65,6 +65,12 @@ int main(int argc, char** argv){
 	glutAddMenuEntry("Quantization", 20);
 	glutAddMenuEntry("DoG", 21);
 	glutAddMenuEntry("Image Abstraction", 22);
+	glutAddMenuEntry("FogGlasses", 23);
+	glutAddMenuEntry("Voronoi", 24);
+	glutAddMenuEntry("Television", 25);
+	glutAddMenuEntry("Cluster", 26);
+	glutAddMenuEntry("Dot", 27);
+	glutAddMenuEntry("Fisheye", 28);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 
@@ -76,6 +82,7 @@ int main(int argc, char** argv){
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	//籔龄闽羛
 
 	glutMouseFunc(Mouse);
+	glutPassiveMotionFunc(MouseMove);
 	glutTimerFunc (75, idle, 0); 
 	glutMainLoop();
 	return 0;
@@ -115,9 +122,11 @@ void ChangeSize(int w,int h){
 	height = h;
 }
 void Mouse(int button,int state,int x,int y){
+	if (button == 2) isFrame = false;
+}
+void MouseMove(int x, int y) {
 	mouseX = (float)x / width;
 	mouseY = (float)(height - y) / height;
-	if (button == 2) isFrame = false;
 }
 void idle(int dummy){
 	isFrame = true;
@@ -402,7 +411,7 @@ void init(){
 	programScreen[4] = initShaders("Shader/FBO_Screen.vs", "Shader/Blur.fs");
 	programScreen[5] = initShaders("Shader/FBO_Screen.vs", "Shader/Mosaic.fs");
 	programScreen[6] = initShaders("Shader/FBO_Screen.vs", "Shader/Curve.fs");
-	programScreen[7] = initShaders("Shader/FBO_Screen.vs", "Shader/Curve2.fs");
+	programScreen[7] = initShaders("Shader/FBO_Screen.vs", "Shader/NPR.fs");
 	programScreen[8] = initShaders("Shader/FBO_Screen.vs", "Shader/Noise.fs");
 	programScreen[9] = initShaders("Shader/FBO_Screen.vs", "Shader/Noise2.fs");
 	programScreen[10] = initShaders("Shader/FBO_Screen.vs", "Shader/Bling.fs");
@@ -418,6 +427,12 @@ void init(){
 	programScreen[20] = initShaders("Shader/FBO_Screen.vs", "Shader/Quantization.fs");
 	programScreen[21] = initShaders("Shader/FBO_Screen.vs", "Shader/DoG.fs");
 	programScreen[22] = initShaders("Shader/FBO_Screen.vs", "Shader/Abstraction.fs");
+	programScreen[23] = initShaders("Shader/FBO_Screen.vs", "Shader/FogGlasses.fs");
+	programScreen[24] = initShaders("Shader/FBO_Screen.vs", "Shader/Voronoi.fs");
+	programScreen[25] = initShaders("Shader/FBO_Screen.vs", "Shader/Television.fs");
+	programScreen[26] = initShaders("Shader/FBO_Screen.vs", "Shader/Cluster.fs");
+	programScreen[27] = initShaders("Shader/FBO_Screen.vs", "Shader/Dot.fs");
+	programScreen[28] = initShaders("Shader/FBO_Screen.vs", "Shader/Fisheye.fs");
 	glUseProgram(program);//uniform把计计玡ゲ斗use shader
 	
 	MatricesIdx = glGetUniformBlockIndex(program,"MatVP");
@@ -468,6 +483,9 @@ void display(){
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	glBindVertexArray(VAO);
+	if(isLine)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	glUseProgram(program);//uniform把计计玡ゲ斗use shader
 	float eyey = DOR(eyeAngley);
 	View       = lookAt(
@@ -545,6 +563,7 @@ void display(){
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//PostProcessing FILL
 	glUseProgram(programScreen[shader]);
 	if (shader >= 7) {
 		GLint index = glGetUniformLocation(programScreen[shader], "time");
@@ -840,10 +859,10 @@ void ActionMenuEvents(int option){
 void ModeMenuEvents(int option){
 	switch(option){
 	case 0:
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		isLine = true;
 		break;
 	case 1:
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		isLine = false;
 		break;
 	}
 }

@@ -1,1 +1,21 @@
-﻿  Robot.vcxproj -> E:\code\C++\Graph1\Robot-RX78\Robot\Debug\Robot.exe
+﻿  main.cpp
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(490): warning C4244: '正在初始化': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(546): warning C4018: '<': signed/unsigned 不相符
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(570): warning C4244: '引數': 將 'int' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(577): warning C4244: '引數': 將 'GLuint' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(595): warning C4018: '<': signed/unsigned 不相符
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(693): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(695): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(700): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(702): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(706): warning C4244: '引數': 將 'int' 轉換為 'float'，由於類型不同，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(713): warning C4244: '引數': 將 'int' 轉換為 'float'，由於類型不同，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(721): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(723): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(732): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(738): warning C4305: '引數': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(792): warning C4244: '正在初始化': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(815): warning C4305: '-=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+d:\csie program homework\基圖 project1\robot-rx78\robot\main.cpp(818): warning C4305: '+=': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+  Robot.vcxproj -> D:\CSIE Program Homework\基圖 Project1\Robot-RX78\Robot\Debug\Robot.exe
+  Robot.vcxproj -> D:\CSIE Program Homework\基圖 Project1\Robot-RX78\Robot\Debug\Robot.pdb (Full PDB)

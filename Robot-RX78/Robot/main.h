@@ -27,6 +27,7 @@ void ChangeSize(int w,int h);
 void display();
 void Keyboard(unsigned char key, int x, int y);
 void Mouse(int button,int state,int x,int y);
+void MouseMove(int x, int y);
 
 void menuEvents(int option);
 void ActionMenuEvents(int option);
@@ -47,6 +48,8 @@ void walk(int);
 void resetObj(int);
 
 bool isFrame;
+
+bool isLine=false;
 
 GLuint VAO;
 GLuint VBO;

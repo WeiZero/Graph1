@@ -29,7 +29,7 @@ void main() {
 		s *= .95;
 		col += .01 / max(abs(ray.x), abs(ray.y));
 	}
-	col = abs(col-1);
+	//col = abs(col-1);
 	FragColor = vec4(col, 1.0) * texture2D(screenTexture,TexCoords);
 
 }

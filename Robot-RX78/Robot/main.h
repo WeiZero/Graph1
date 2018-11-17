@@ -98,8 +98,8 @@ mat4 Models[PARTSNUM];
 #define BLUR		4
 #define MOSAIC		5
 #define CURVE		6
-#define NOISE		7
-#define BLING		8
+#define NOISE		8
+#define BLING		10
 
 int mode;
 int action;

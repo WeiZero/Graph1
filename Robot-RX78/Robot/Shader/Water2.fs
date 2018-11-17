@@ -14,7 +14,7 @@ float Turb(vec2 p)
 	float inten = 0.1;
 	float r = length(p+vec2(sin(mouse.x),sin(mouse.y*0.433+2.))*3.);
 	
-	for (float n = 0.0; n < 128; n++) {
+	for (float n = 0.0; n < 1; n++) {
 		float t = r-time * (1.0 - (1.9 / (n+1.)));
 		      t = r-time/(n+0.6);
 		i -= p + vec2(
@@ -28,7 +28,7 @@ float Turb(vec2 p)
 		);
 	
 	}
-	c /= float(128);
+	c /= float(1);
 	c = clamp(c,-1.0,1.0);
 	return c;
 	
@@ -38,5 +38,5 @@ void main( void ) {
 
 	vec2 p = TexCoords*24.0;
 	float c = Turb(p);
-	FragColor = vec4(vec3(c,c,c),1.0) * texture2D(screenTexture,TexCoords);	//
+	FragColor = vec4(vec3(c,c,c),1.0) * texture2D(screenTexture,TexCoords);
 }

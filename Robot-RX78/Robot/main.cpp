@@ -49,13 +49,13 @@ int main(int argc, char** argv){
 	glutAddMenuEntry("Blur", BLUR);
 	glutAddMenuEntry("Mosaic", MOSAIC);
 	glutAddMenuEntry("Curve", CURVE);
+	glutAddMenuEntry("Curve2", 7);
 	glutAddMenuEntry("Noise", NOISE);
+	glutAddMenuEntry("Noise2", 9);
 	glutAddMenuEntry("Bling", BLING);
-	glutAddMenuEntry("Curve2", 9);
-	glutAddMenuEntry("Noise2", 10);
 	glutAddMenuEntry("Water", 11);
-	glutAddMenuEntry("12", 12);
-	glutAddMenuEntry("13", 13);
+	glutAddMenuEntry("Water2", 12);
+	glutAddMenuEntry("Water3", 13);
 	glutAddMenuEntry("14", 14);
 	glutAddMenuEntry("15", 15);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
@@ -78,21 +78,32 @@ void ChangeSize(int w,int h){
 	glViewport(0,0,w,h);
 	Projection = perspective(80.0f,(float)w/h,0.1f,100.0f);
 
-	/*
+	
 	glDeleteTextures(1, &textureColorbuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, w, h);
 
+	glGenFramebuffers(1, &framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	// create a color attachment texture
+
 	glGenTextures(1, &textureColorbuffer);
 	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLint)w, (GLint)h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);*/
+	// create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+
+	glGenRenderbuffers(1, &renderbuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, (GLint)w, (GLint)h); // use a single renderbuffer object for both a depth AND stencil buffer.
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderbuffer); // now actually attach it
+																										   // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 void Mouse(int button,int state,int x,int y){
 	if(button == 2) isFrame = false;
@@ -380,11 +391,14 @@ void init(){
 	programScreen[4] = initShaders("Shader/FBO_Screen.vs", "Shader/Blur.fs");
 	programScreen[5] = initShaders("Shader/FBO_Screen.vs", "Shader/Mosaic.fs");
 	programScreen[6] = initShaders("Shader/FBO_Screen.vs", "Shader/Curve.fs");
-	programScreen[7] = initShaders("Shader/FBO_Screen.vs", "Shader/Noise.fs");
-	programScreen[8] = initShaders("Shader/FBO_Screen.vs", "Shader/Bling.fs");
-	programScreen[9] = initShaders("Shader/FBO_Screen.vs", "Shader/Curve2.fs");
-	programScreen[10] = initShaders("Shader/FBO_Screen.vs", "Shader/Noise2.fs");
+	programScreen[7] = initShaders("Shader/FBO_Screen.vs", "Shader/Curve2.fs");
+	programScreen[8] = initShaders("Shader/FBO_Screen.vs", "Shader/Noise.fs");
+	programScreen[9] = initShaders("Shader/FBO_Screen.vs", "Shader/Noise2.fs");
+	programScreen[10] = initShaders("Shader/FBO_Screen.vs", "Shader/Bling.fs");
 	programScreen[11] = initShaders("Shader/FBO_Screen.vs", "Shader/Water.fs");
+	programScreen[12] = initShaders("Shader/FBO_Screen.vs", "Shader/Water2.fs");
+	programScreen[13] = initShaders("Shader/FBO_Screen.vs", "Shader/Water3.fs");
+	programScreen[14] = initShaders("Shader/FBO_Screen.vs", "Shader/Wave.fs");
 	glUseProgram(program);//uniform參數數值前必須先use shader
 	
 	MatricesIdx = glGetUniformBlockIndex(program,"MatVP");
@@ -421,7 +435,7 @@ void init(){
 
 	initScreen();
 	initFBO();
-	glClearColor(0.0,0.0,0.0,1);//black screen
+	glClearColor(1,1,1,1);//black screen
 
 }
 
@@ -431,7 +445,7 @@ void display(){
 	glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
 
 	// make sure we clear the framebuffer's content
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	glBindVertexArray(VAO);

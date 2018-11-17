@@ -5,8 +5,7 @@ in vec2 TexCoords;
 
 uniform sampler2D screenTexture;
 uniform float time;
-uniform vec2 mouse = vec2( 0.5, 0.5);
-
+uniform vec2 mouse;
 
 void main( void ) {
   	vec2 sp = TexCoords;
@@ -14,10 +13,10 @@ void main( void ) {
   	vec2 i = p;
   	float c = 1.0;        // brightness; larger -> darker
   	float inten = 0.025;  // brightness; larger -> brighter
-  	float speed = 100.0;    // larger -> slower
-  	float speed2 = 0.0;   // larger -> slower
-  	float freq = 0.8;     // ripples
-  	float xflow = 0.0;    // flow speed in x direction
+  	float speed = 0.1;    // larger -> slower
+  	float speed2 = 0.1;   // larger -> slower
+  	float freq = 0.5;     // ripples
+  	float xflow = 0.1;    // flow speed in x direction
   	float yflow = 0.0;    // flow speed in y direction
 
   	for (int n = 0; n < 2; n++) {

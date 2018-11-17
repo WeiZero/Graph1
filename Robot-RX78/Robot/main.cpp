@@ -56,8 +56,15 @@ int main(int argc, char** argv){
 	glutAddMenuEntry("Water", 11);
 	glutAddMenuEntry("Water2", 12);
 	glutAddMenuEntry("Water3", 13);
-	glutAddMenuEntry("14", 14);
-	glutAddMenuEntry("15", 15);
+	glutAddMenuEntry("Circle", 14);
+	glutAddMenuEntry("Light", 15);
+	glutAddMenuEntry("Average filter", 16);
+	glutAddMenuEntry("Median filter", 17);
+	glutAddMenuEntry("Triangle filter", 18);
+	glutAddMenuEntry("Gaussian filter", 19);
+	glutAddMenuEntry("Quantization", 20);
+	glutAddMenuEntry("DoG", 21);
+	glutAddMenuEntry("Image Abstraction", 22);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 
@@ -104,9 +111,13 @@ void ChangeSize(int w,int h){
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	width = w;
+	height = h;
 }
 void Mouse(int button,int state,int x,int y){
-	if(button == 2) isFrame = false;
+	mouseX = (float)x / width;
+	mouseY = (float)(height - y) / height;
+	if (button == 2) isFrame = false;
 }
 void idle(int dummy){
 	isFrame = true;
@@ -398,7 +409,15 @@ void init(){
 	programScreen[11] = initShaders("Shader/FBO_Screen.vs", "Shader/Water.fs");
 	programScreen[12] = initShaders("Shader/FBO_Screen.vs", "Shader/Water2.fs");
 	programScreen[13] = initShaders("Shader/FBO_Screen.vs", "Shader/Water3.fs");
-	programScreen[14] = initShaders("Shader/FBO_Screen.vs", "Shader/Wave.fs");
+	programScreen[14] = initShaders("Shader/FBO_Screen.vs", "Shader/Circle.fs");
+	programScreen[15] = initShaders("Shader/FBO_Screen.vs", "Shader/Light.fs");
+	programScreen[16] = initShaders("Shader/FBO_Screen.vs", "Shader/Average.fs");
+	programScreen[17] = initShaders("Shader/FBO_Screen.vs", "Shader/Median.fs");
+	programScreen[18] = initShaders("Shader/FBO_Screen.vs", "Shader/Triangle.fs");
+	programScreen[19] = initShaders("Shader/FBO_Screen.vs", "Shader/Gaussian.fs");
+	programScreen[20] = initShaders("Shader/FBO_Screen.vs", "Shader/Quantization.fs");
+	programScreen[21] = initShaders("Shader/FBO_Screen.vs", "Shader/DoG.fs");
+	programScreen[22] = initShaders("Shader/FBO_Screen.vs", "Shader/Abstraction.fs");
 	glUseProgram(program);//uniform把计计玡ゲ斗use shader
 	
 	MatricesIdx = glGetUniformBlockIndex(program,"MatVP");
@@ -530,6 +549,13 @@ void display(){
 	if (shader >= 7) {
 		GLint index = glGetUniformLocation(programScreen[shader], "time");
 		glUniform1f(index, glutGet(GLUT_ELAPSED_TIME));
+
+		// 紇臫ぃびQAQ埃伴êㄤ常⊿畉稰谋
+		index = glGetUniformLocation(programScreen[shader], "mouse");
+		glUniform2f(index, mouseX, mouseY);
+
+		index = glGetUniformLocation(programScreen[shader], "img_size");
+		glUniform2f(index, width, height);
 	}
 	glBindVertexArray(quadVAO);
 	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane

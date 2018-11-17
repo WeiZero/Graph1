@@ -5,10 +5,11 @@ in vec2 TexCoords;
 
 uniform sampler2D screenTexture;
 uniform float time;
-uniform vec2 mouse = vec2( 0.5, 0.5);
+uniform vec2 mouse =vec2(1,1);
 
 float Turb(vec2 p)
 {
+
 	vec2 i = p;
 	float c = 0.0;
 	float inten = 0.1;

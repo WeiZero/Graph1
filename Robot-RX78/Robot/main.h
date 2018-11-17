@@ -16,7 +16,7 @@ using namespace std;
 using namespace glm;
 
 
-#define SHADERSUM	20
+#define SHADERSUM	30
 #define PARTSNUM	9
 
 void updateModels();
@@ -111,4 +111,5 @@ GLuint framebuffer;
 GLuint textureColorbuffer;
 GLuint renderbuffer;
 
-GLuint width, height;
+GLfloat mouseX, mouseY;
+GLuint width = 800, height = 600;
